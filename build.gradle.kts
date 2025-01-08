@@ -44,6 +44,17 @@ dependencies {
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// Swagger (Springdoc OpenAPI)
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+	// Lombok 추가
+	compileOnly("org.projectlombok:lombok:1.18.30") // 컴파일 시만 사용
+	annotationProcessor("org.projectlombok:lombok:1.18.30") // 애노테이션 처리기
+
+	// Test용 Lombok (Optional)
+	testCompileOnly("org.projectlombok:lombok:1.18.30")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 tasks.withType<Test> {
