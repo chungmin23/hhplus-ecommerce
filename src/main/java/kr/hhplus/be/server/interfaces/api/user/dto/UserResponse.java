@@ -5,8 +5,9 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserResponse {
-    private int userId;
+    private Long userId;
     private int amount;
 
 }
