@@ -59,10 +59,10 @@ class UserServiceTest {
         Mockito.when(userRepository.findById(useId)).thenReturn(Optional.of(user));
 
         //when
-        int balance = userService.getBalance(useId);
+        User user2 = userService.getBalance(useId);
 
         //then
-        Assertions.assertEquals(1000,balance);
+        Assertions.assertEquals(1000, user2.getBalance());
     }
 
     @DisplayName("사용자가 있는지 테스트 합니다")
