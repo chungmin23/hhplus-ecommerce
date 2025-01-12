@@ -1,9 +1,15 @@
 package kr.hhplus.be.server.interfaces.api.coupon.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import kr.hhplus.be.server.domain.coupon.Coupon;
+import kr.hhplus.be.server.domain.coupon.CouponIssue;
+import kr.hhplus.be.server.domain.coupon.service.CouponService;
 import kr.hhplus.be.server.interfaces.api.common.MultiResoponseDto;
 import kr.hhplus.be.server.interfaces.api.common.SingleResponseDto;
+import kr.hhplus.be.server.interfaces.api.coupon.dto.CouponRequest;
 import kr.hhplus.be.server.interfaces.api.coupon.dto.CouponResponse;
+import kr.hhplus.be.server.interfaces.api.user.dto.BalanceChargeRequset;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,47 +18,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/coupon")
 public class CouponController {
+
+    @Autowired
+    private CouponService couponService;
 
     @Operation(summary = "쿠폰 발급", description = "쿠폰 발급을합니다.")
     //쿠폰 발급
-    @PostMapping("/coupon")
-    public ResponseEntity issueCoupon(){
-
-        CouponResponse couponResponse = CouponResponse.builder()
-                .couponId(1)
-                .discountAmount(23000)
-                .isUsed(false)
-                .build();
-
-
-        return new ResponseEntity<>(new SingleResponseDto<>(couponResponse), HttpStatus.CREATED);
+    @PostMapping("/issue")
+    public ResponseEntity issueCoupon(@RequestBody CouponRequest couponRequest){
+        CouponIssue issueCoupon = couponService.issueCoupon(couponRequest.getCouponId(), couponRequest.getUserId());
+        return new ResponseEntity<>(new SingleResponseDto<>(issueCoupon), HttpStatus.CREATED);
     }
 
 
 
-    @Operation(summary = "쿠폰 조회", description = "쿠폰 조회을합니다.")
+    @Operation(summary = "쿠폰 조회", description = "쿠폰 조회을 합니다.")
     //쿠폰 조회
-    @GetMapping("/coupon/{userId}")
-    public ResponseEntity listCoupon(@PathVariable int userId){
+    @GetMapping("/{userId}")
+    public ResponseEntity listCoupon(@PathVariable Long userId){
 
-        CouponResponse couponResponse1 = CouponResponse.builder()
-                .couponId(1)
-                .discountAmount(23000)
-                .isUsed(false)
-                .build();
-        CouponResponse couponResponse2 = CouponResponse.builder()
-                .couponId(2)
-                .discountAmount(32000)
-                .isUsed(false)
-                .build();
+        List<CouponIssue> couponIssues = couponService.getUserCoupons(userId);
 
-        List<CouponResponse> couponResponses = new ArrayList<>();
-        couponResponses.add(couponResponse1);
-        couponResponses.add(couponResponse2);
-
-
-        return new ResponseEntity<>(new MultiResoponseDto<>(couponResponses), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MultiResoponseDto<>(couponIssues), HttpStatus.OK);
     }
 }
