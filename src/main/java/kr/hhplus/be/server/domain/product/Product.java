@@ -16,12 +16,10 @@ public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private int id;
+    private Long id;
 
-    @Column(name = "product_name")
     private String name;
 
-    @Column(name = "product_price")
     private int price;
 
     private int stock;
