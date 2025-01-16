@@ -1,9 +1,11 @@
 package kr.hhplus.be.server.domain.user;
 
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.infrastructure.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +16,8 @@ public class UserService {
     //최대 잔고 금액
     private static final int MAX_BALANCE_EXCEEDED = 1000000;
 
+    // 비관적 락 추가
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
@@ -22,7 +26,7 @@ public class UserService {
     // 잔고 충전
     @Transactional
     public User chargeBalance(Long userId, int amount){
-        User user = userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
+        User user = getUserById(userId);
 
         int updateBalance = user.getBalance() + amount;
 

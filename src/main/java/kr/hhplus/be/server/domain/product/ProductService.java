@@ -1,10 +1,12 @@
 package kr.hhplus.be.server.domain.product;
 
+import jakarta.persistence.LockModeType;
 import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.infrastructure.order.OrderRepository;
 import kr.hhplus.be.server.infrastructure.product.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
@@ -39,14 +41,14 @@ public class ProductService {
 
     // 재고 검증 및 감소
     public void validateAndReduceStock(Long productId, int quantity) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.PRODUCT_NOT_FOUND));
+        Product product = getProductById(productId);
 
         product.decreaseStock(quantity);
         productRepository.save(product);
     }
 
     // 제품 정보 조회
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public Product getProductById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException(ErroMessages.PRODUCT_NOT_FOUND));
