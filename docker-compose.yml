@@ -12,6 +12,7 @@ services:
     volumes:
       - ./data/mysql/:/var/lib/mysql
 
+
 networks:
   default:
     driver: bridge
