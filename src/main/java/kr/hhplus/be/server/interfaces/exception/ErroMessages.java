@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.domain.common;
+package kr.hhplus.be.server.interfaces.exception;
 
 public class ErroMessages {
     public static final String MAX_BALANCE_EXCEEDED = "최대 잔고를 초과를 한경우";
