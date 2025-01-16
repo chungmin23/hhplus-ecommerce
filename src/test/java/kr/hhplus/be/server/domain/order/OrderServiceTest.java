@@ -1,8 +1,7 @@
 package kr.hhplus.be.server.domain.order;
 
-import kr.hhplus.be.server.domain.common.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.domain.product.Product;
-import kr.hhplus.be.server.domain.product.ProductService;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infrastructure.order.OrderRepository;
 import kr.hhplus.be.server.infrastructure.product.ProductRepository;
@@ -19,8 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
     @InjectMocks
@@ -36,6 +33,7 @@ class OrderServiceTest {
     private ProductRepository productRepository;
 
     private final Long VALID_USER_ID = 1L;
+
 
     // 상품이 존재하지 않는 경우
     @DisplayName("상품이 존재하지 않는 경우")
@@ -57,7 +55,7 @@ class OrderServiceTest {
         // When & Then
         IllegalArgumentException exception = Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> orderService.createOrder(VALID_USER_ID, orderDetails)
+                () -> orderService.createOrder(user, null,0,0)
         );
 
         Assertions.assertEquals(ErroMessages.PRODUCT_NOT_FOUND, exception.getMessage());
@@ -94,7 +92,7 @@ class OrderServiceTest {
         // When & Then
         IllegalArgumentException exception = Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> orderService.createOrder(VALID_USER_ID, orderDetails)
+                () -> orderService.createOrder(user, null,0,0)
         );
 
         Assertions.assertEquals("Insufficient stock for product: Product 1", exception.getMessage());

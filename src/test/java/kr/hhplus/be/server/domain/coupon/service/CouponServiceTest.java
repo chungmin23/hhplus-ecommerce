@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.coupon.service;
 
-import kr.hhplus.be.server.domain.common.ErroMessages;
+import kr.hhplus.be.server.domain.coupon.CouponService;
+import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.domain.coupon.Coupon;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infrastructure.coupon.CouponIssueRepository;
@@ -16,8 +17,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class CouponServiceTest {

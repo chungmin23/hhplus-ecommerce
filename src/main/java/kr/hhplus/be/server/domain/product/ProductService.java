@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.product;
 
+import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.infrastructure.order.OrderRepository;
 import kr.hhplus.be.server.infrastructure.product.ProductRepository;
 import org.springframework.data.domain.Page;
@@ -22,15 +23,32 @@ public class ProductService {
         this.orderRepositroy = orderRepositroy;
     }
 
+    // 제품 조회
     public List<Product> getProduct(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productRepository.findAll(pageable);
         return productPage.getContent();
     }
 
+    // 인기 상품 조회
     public List<Product> getTopProducts(int days, int size){
         LocalDateTime startDate = LocalDateTime.now().minusDays(days);
         List<Long> topProductIds = orderRepositroy.findTopProductIdsBySales(startDate, PageRequest.of(0, size));
         return productRepository.findAllById(topProductIds);
+    }
+
+    // 재고 검증 및 감소
+    public void validateAndReduceStock(Long productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.PRODUCT_NOT_FOUND));
+
+        product.decreaseStock(quantity);
+        productRepository.save(product);
+    }
+
+    // 제품 정보 조회
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.PRODUCT_NOT_FOUND));
     }
 }

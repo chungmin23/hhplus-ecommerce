@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.payment;
 
-import kr.hhplus.be.server.domain.common.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderStatus;
 import kr.hhplus.be.server.domain.user.User;
@@ -34,6 +34,9 @@ class PaymentServiceTest {
     @Mock
     private UserRepository userRepository; // Mock Repository
 
+    @Mock
+    private PaymentFacade paymentFacade;
+
     private final Long VALID_ORDER_ID = 1L;
     private final Long VALID_USER_ID = 100L;
 
@@ -46,7 +49,7 @@ class PaymentServiceTest {
         // When & Then
         IllegalArgumentException exception = Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> paymentService.processPayment(VALID_ORDER_ID, VALID_USER_ID)
+                () -> paymentFacade.processPayment(VALID_ORDER_ID, VALID_USER_ID)
         );
 
         Assertions.assertEquals(ErroMessages.ORDER_NOT_FOUND, exception.getMessage());
@@ -76,7 +79,7 @@ class PaymentServiceTest {
         // When & Then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> paymentService.processPayment(VALID_ORDER_ID, VALID_USER_ID)
+                () -> paymentFacade.processPayment(VALID_ORDER_ID, VALID_USER_ID)
         );
 
         assertEquals(ErroMessages.INSUFFICIENT_BALANCE, exception.getMessage());

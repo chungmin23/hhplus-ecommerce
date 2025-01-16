@@ -1,62 +1,53 @@
 package kr.hhplus.be.server.domain.order;
 
-import kr.hhplus.be.server.domain.common.ErroMessages;
+import jakarta.transaction.Transactional;
+import kr.hhplus.be.server.domain.coupon.Coupon;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.infrastructure.order.OrderRepository;
-import kr.hhplus.be.server.infrastructure.product.ProductRepository;
-import kr.hhplus.be.server.infrastructure.user.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class OrderService {
 
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+
     private final OrderRepository orderRepository;
 
-    public OrderService(ProductRepository productRepository, UserRepository userRepository, OrderRepository orderRepository) {
-        this.productRepository = productRepository;
-        this.userRepository = userRepository;
+    public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
-    public Order createOrder(Long userId, List<OrderDetailRequest> orderDetails){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
-
-        List<OrderDetail> details = new ArrayList<>();
-        int totalPrice = 0;
-
-        for (OrderDetailRequest detailRequest : orderDetails) {
-            Product product = productRepository.findById(detailRequest.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException(ErroMessages.PRODUCT_NOT_FOUND));
-
-            product.decreaseStock(detailRequest.getQuantity());
-            productRepository.save(product);
-
-            OrderDetail detail = OrderDetail.builder()
-                    .product(product)
-                    .quantity(detailRequest.getQuantity())
-                    .price(product.getPrice() * detailRequest.getQuantity())
-                    .build();
-
-            details.add(detail);
-            totalPrice += detail.getPrice();
-        }
-
+    //주문 정보 저장
+    @Transactional
+    public Order createOrder(User user,  Coupon coupon, int totalPrice, int discountPrice) {
+        // Create Order
         Order order = Order.builder()
                 .user(user)
-                //.orderDetails(details)
                 .totalPrice(totalPrice)
+                .discountPrice(discountPrice)
                 .status(OrderStatus.PENDING)
+                .coupon(coupon)
                 .build();
 
-        details.forEach(detail -> detail.setOrder(order));
+        return orderRepository.save(order);
+    }
+
+    // 주문 id 확인
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.ORDER_NOT_FOUND));
+    }
+
+    // 주문 상태 업데이트
+    @Transactional
+    public Order updateOrderStatus(Long orderId, OrderStatus status) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.ORDER_NOT_FOUND));
+        order.setStatus(status);
         return orderRepository.save(order);
     }
 }

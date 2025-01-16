@@ -1,8 +1,6 @@
-package kr.hhplus.be.server.domain.coupon.service;
+package kr.hhplus.be.server.domain.coupon;
 
-import kr.hhplus.be.server.domain.common.ErroMessages;
-import kr.hhplus.be.server.domain.coupon.Coupon;
-import kr.hhplus.be.server.domain.coupon.CouponIssue;
+import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infrastructure.coupon.CouponIssueRepository;
 import kr.hhplus.be.server.infrastructure.coupon.CouponRepository;
@@ -63,5 +61,22 @@ public class CouponService {
         return couponIssueRepository.findUnusedCouponByUserId(userId);
     }
 
+    //쿠폰 검증 및 할인 금액 계산
+    public Coupon validateCouponForOrder(Long couponId, Long userId, int totalPrice) {
+
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.COUPON_NOT_FOUND));
+
+        //사용 가능 쿠폰 인지 확인
+        CouponIssue couponIssue = couponIssueRepository.findUnusedCouponByUserIdAndCouponId(userId, couponId)
+                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.COUPON_NOT_FOUND));
+
+        //할인 금액 검증
+        if (totalPrice < coupon.getDiscountPrice()) {
+            throw new IllegalArgumentException(ErroMessages.COUPON_NOT_FOUND);
+        }
+
+        return coupon;
+    }
 
 }
