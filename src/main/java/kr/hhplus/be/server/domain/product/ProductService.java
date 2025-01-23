@@ -50,7 +50,7 @@ public class ProductService {
     // 제품 정보 조회
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public Product getProductById(Long productId) {
-        return productRepository.findById(productId)
+        return productRepository.findByIdWithLock(productId)
                 .orElseThrow(() -> new IllegalArgumentException(ErroMessages.PRODUCT_NOT_FOUND));
     }
 }
