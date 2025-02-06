@@ -1,11 +1,13 @@
 package kr.hhplus.be.server.interfaces.api.coupon.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import kr.hhplus.be.server.domain.coupon.CouponFacade;
 import kr.hhplus.be.server.domain.coupon.CouponIssue;
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.interfaces.api.common.MultiResoponseDto;
 import kr.hhplus.be.server.interfaces.api.common.SingleResponseDto;
 import kr.hhplus.be.server.interfaces.api.coupon.dto.CouponRequest;
+import kr.hhplus.be.server.interfaces.api.coupon.dto.CouponResponse;
 import kr.hhplus.be.server.interfaces.api.payment.controller.PaymentController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,7 @@ import java.util.List;
 public class CouponController {
     private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
     @Autowired
-    private CouponService couponService;
+    private CouponFacade couponFacade;
 
     @Operation(summary = "쿠폰 발급", description = "쿠폰 발급을합니다.")
     //쿠폰 발급
@@ -29,10 +31,10 @@ public class CouponController {
     public ResponseEntity issueCoupon(@RequestBody CouponRequest couponRequest){
         logger.info("Received request:  body={}",  couponRequest);
 
-        CouponIssue issueCoupon = couponService.issueCoupon(couponRequest.getCouponId(), couponRequest.getUserId());
+        Boolean success = couponFacade.issueCoupon(couponRequest.getCouponId(), couponRequest.getUserId());
 
-        logger.info("Sending response: {}", issueCoupon);
-        return new ResponseEntity<>(new SingleResponseDto<>(issueCoupon), HttpStatus.CREATED);
+      
+        return new ResponseEntity<>(new SingleResponseDto<>("쿠폰 발급 요청이 되었습니다"), HttpStatus.CREATED);
     }
 
 
@@ -43,7 +45,8 @@ public class CouponController {
     public ResponseEntity listCoupon(@PathVariable Long userId){
         logger.info("Received request:  param1={}",  userId);
 
-        List<CouponIssue> couponIssues = couponService.getUserCoupons(userId);
+        List<CouponIssue> couponIssues = couponFacade.getUserCoupons(userId);
+
 
         logger.info("Sending response: {}", couponIssues);
         return new ResponseEntity<>(new MultiResoponseDto<>(couponIssues), HttpStatus.OK);
