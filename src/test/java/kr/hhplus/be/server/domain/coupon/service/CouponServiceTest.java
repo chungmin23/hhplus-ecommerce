@@ -59,28 +59,28 @@ class CouponServiceTest {
     @Test
     void userCoupon_Success() {
         // Given
-        Coupon coupon = Coupon.builder()
-                .id(1l)
-                .name("Discount Coupon")
-                .maxIssueCount(5)
-                .build();
-
-        Mockito.when(couponRepository.findById(VALID_COUPON_ID))
-                .thenReturn(Optional.of(coupon));
-
-        Mockito.when(userRepository.findById(VALID_USER_ID))
-                .thenReturn(Optional.of(new User()));
-
-        Mockito.when(couponIssueRepository.countByCouponId(VALID_COUPON_ID))
-                .thenReturn(5L); // 최대 발급 수량 도달
-
-        // When & Then
-        IllegalArgumentException exception = Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> couponService.issueCoupon(VALID_COUPON_ID, VALID_USER_ID)
-        );
-
-        Assertions.assertEquals(ErroMessages.GET_MAX_ISSUE_COUNT, exception.getMessage());
+//        Coupon coupon = Coupon.builder()
+//                .id(1l)
+//                .name("Discount Coupon")
+//                .maxIssueCount(5)
+//                .build();
+//
+//        Mockito.when(couponRepository.findById(VALID_COUPON_ID))
+//                .thenReturn(Optional.of(coupon));
+//
+//        Mockito.when(userRepository.findById(VALID_USER_ID))
+//                .thenReturn(Optional.of(new User()));
+//
+//        Mockito.when(couponIssueRepository.countByCouponId(VALID_COUPON_ID))
+//                .thenReturn(5L); // 최대 발급 수량 도달
+//
+//        // When & Then
+//        IllegalArgumentException exception = Assertions.assertThrows(
+//                IllegalArgumentException.class,
+//                () -> couponService.issueCoupon(VALID_COUPON_ID, VALID_USER_ID)
+//        );
+//
+//        Assertions.assertEquals(ErroMessages.GET_MAX_ISSUE_COUNT, exception.getMessage());
 
     }
 

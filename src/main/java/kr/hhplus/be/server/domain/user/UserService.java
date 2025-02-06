@@ -41,18 +41,23 @@ public class UserService {
     }
 
     // 잔고 조회
-    @Transactional
     public User getBalance(Long userId){
         return userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
     }
 
+    //잔고 감소
     @Transactional
     public User deductBalance(Long userId, int amount) {
+        // 사용자 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
+        
+        // 잔액 확인
         if (user.getBalance() < amount) {
             throw new IllegalArgumentException(ErroMessages.INSUFFICIENT_BALANCE);
         }
+        
+        //잔액 차감
         user.setBalance(user.getBalance() - amount);
         return userRepository.save(user);
     }

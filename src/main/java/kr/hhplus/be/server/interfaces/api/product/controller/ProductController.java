@@ -10,6 +10,7 @@ import kr.hhplus.be.server.interfaces.api.product.dto.ProductResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class ProductController {
     private ProductService productService;
 
     @Operation(summary = "상품 전체 조회", description = "상품 전체 조회을합니다.")
+    @Cacheable(cacheNames = "getProducts",  key = "'products:page:' + #page + ':size:' + #size", cacheManager = "boardCacheManager")
     //상품 전체 조회
     @GetMapping("/all")
     public ResponseEntity listProducts(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size){
@@ -40,6 +42,8 @@ public class ProductController {
     }
 
     @Operation(summary = "상위 상품 조회", description = "상위 상품을 조회합니다.")
+
+   // @Cacheable(cacheNames = "getProducts",  key = "'products:days:' + #days + ':size:' + #size", cacheManager = "boardCacheManager")
     //상위 상품 조회
     @GetMapping("/top")
     public ResponseEntity topProducts( @RequestParam(defaultValue = "3") int days,

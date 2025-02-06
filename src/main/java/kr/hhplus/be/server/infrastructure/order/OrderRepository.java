@@ -12,12 +12,13 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("SELECT od.product.id " +
-            "FROM OrderDetail od " +
-            "JOIN od.order o " +
-            "WHERE o.regDate >= :startDate " +
-            "GROUP BY od.product.id " +
-            "ORDER BY SUM(od.quantity) DESC")
+    @Query("""
+        SELECT od.product.id 
+        FROM OrderDetail od
+        WHERE od.regDate >= :startDate
+        GROUP BY od.product.id
+        ORDER BY SUM(od.quantity) DESC
+    """)
     List<Long> findTopProductIdsBySales(@Param("startDate") LocalDateTime startDate, Pageable pageable);
 
 }
