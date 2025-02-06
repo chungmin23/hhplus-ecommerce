@@ -55,6 +55,9 @@ dependencies {
 	// Test용 Lombok (Optional)
 	testCompileOnly("org.projectlombok:lombok:1.18.30")
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.springframework.boot:spring-boot-starter-cache")
 }
 
 tasks.withType<Test> {
