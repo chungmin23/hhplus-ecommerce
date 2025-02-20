@@ -34,16 +34,16 @@ public class PaymentController {
                                    @RequestParam Long userId){
         logger.info("Received request: param1={}, param2={}",  orderId, userId);
 
-        Payment payment = paymentFacade.processPayment(orderId, userId);
+        paymentFacade.processPayment(orderId, userId);
 
-        PaymentResponse paymentResponse=  PaymentResponse.builder()
-                .id(payment.getId())
-                .amount(payment.getAmount())
-                .status(payment.getStatus())
-                .build();
+//        PaymentResponse paymentResponse=  PaymentResponse.builder()
+//                .id(payment.getId())
+//                .amount(payment.getAmount())
+//                .status(payment.getStatus())
+//                .build();
 
-        logger.info("Sending response: {}", payment);
-        return new ResponseEntity<>(new SingleResponseDto<>(paymentResponse), HttpStatus.CREATED);
+       // logger.info("Sending response: {}", payment);
+        return new ResponseEntity<>(new SingleResponseDto<>("주문 완료"), HttpStatus.CREATED);
 
 
     }
