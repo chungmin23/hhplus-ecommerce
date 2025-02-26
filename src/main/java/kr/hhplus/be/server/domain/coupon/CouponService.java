@@ -26,7 +26,7 @@ public class CouponService {
     //쿠폰 발급
     public CouponIssue issueCoupon(Long couponId, Long userId){
         // 쿠폰 있는지 확인
-        Coupon coupon = couponRepository.findById(couponId).orElseThrow(()-> new IllegalArgumentException(ErroMessages.COUPON_NOT_FOUND));
+        Coupon coupon = couponRepository.findByAIdWithLock(couponId).orElseThrow(()-> new IllegalArgumentException(ErroMessages.COUPON_NOT_FOUND));
 
         //사용자 있는지 확인
         User user = userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
