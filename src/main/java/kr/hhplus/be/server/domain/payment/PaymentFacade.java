@@ -26,13 +26,18 @@ public class PaymentFacade {
         // 주문 조회
         Order order = orderService.getOrderById(orderId);
 
+       // 유저 검증 (해당 주문의 userId와 요청 userId 비교)
+        if (!order.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("해당 주문의 결제 권한이 없습니다.");
+        }
+
         // 사용자 잔액 차감
-        userService.deductBalance(userId, order.getTotalPrice());
+        userService.deductBalance(userId, order.getFinalPrice());
 
         // 주문 상태 업데이트
         orderService.updateOrderStatus(orderId, OrderStatus.PAID);
 
         // 결제 저장
-        return paymentService.savePayment(order, order.getTotalPrice());
+        return paymentService.savePayment(order, order.getFinalPrice());
     }
 }

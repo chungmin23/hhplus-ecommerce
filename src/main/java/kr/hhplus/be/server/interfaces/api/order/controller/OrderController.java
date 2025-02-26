@@ -7,6 +7,7 @@ import kr.hhplus.be.server.domain.order.OrderDetailRequest;
 import kr.hhplus.be.server.domain.order.OrderFacade;
 import kr.hhplus.be.server.domain.order.OrderService;
 import kr.hhplus.be.server.interfaces.api.common.SingleResponseDto;
+import kr.hhplus.be.server.interfaces.api.order.dto.OrderDetailRequestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -31,10 +32,10 @@ public class OrderController {
     @Operation(summary = "주문 진행", description = "주문을 진행을합니다.")
     //주문
     @PostMapping("/api/order")
-    public ResponseEntity order(@RequestParam Long userId, @RequestParam(required = false) Long couponId, @RequestBody List<OrderDetailRequest> orderDetails){
-        logger.info("Received request: param1={}, body={}",  userId, orderDetails);
+    public ResponseEntity order(@RequestBody OrderDetailRequestInfo OrderDetailRequestInfo){
+        logger.info("Received request: body={}", OrderDetailRequestInfo);
 
-        Order order =orderFacade.createOrder(userId, orderDetails,couponId);
+        Order order =orderFacade.createOrder(OrderDetailRequestInfo);
 
         logger.info("Sending response: {}", order);
         return new ResponseEntity<>(new SingleResponseDto<>(order), HttpStatus.CREATED);

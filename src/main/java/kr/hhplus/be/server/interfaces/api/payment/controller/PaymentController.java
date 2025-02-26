@@ -6,6 +6,7 @@ import kr.hhplus.be.server.domain.payment.Payment;
 import kr.hhplus.be.server.domain.payment.PaymentFacade;
 import kr.hhplus.be.server.domain.payment.PaymentService;
 import kr.hhplus.be.server.interfaces.api.common.SingleResponseDto;
+import kr.hhplus.be.server.interfaces.api.payment.dto.PaymentResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,14 @@ public class PaymentController {
 
         Payment payment = paymentFacade.processPayment(orderId, userId);
 
+        PaymentResponse paymentResponse=  PaymentResponse.builder()
+                .id(payment.getId())
+                .amount(payment.getAmount())
+                .status(payment.getStatus())
+                .build();
+
         logger.info("Sending response: {}", payment);
-        return new ResponseEntity<>(new SingleResponseDto<>(payment), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(paymentResponse), HttpStatus.CREATED);
 
 
     }

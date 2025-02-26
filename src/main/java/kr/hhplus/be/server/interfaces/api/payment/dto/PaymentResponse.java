@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.interfaces.api.payment.dto;
 
+import kr.hhplus.be.server.domain.payment.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PaymentResponse {
-    private int paymentId;
+    private Long id;
 
     private int orderId;
 
-    private String status;
+    private PaymentStatus status;
 
     private int amount;
 

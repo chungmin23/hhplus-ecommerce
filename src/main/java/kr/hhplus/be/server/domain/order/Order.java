@@ -23,6 +23,8 @@ public class Order extends BaseEntity {
 
     private int discountPrice;
 
+    private int finalPrice;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
