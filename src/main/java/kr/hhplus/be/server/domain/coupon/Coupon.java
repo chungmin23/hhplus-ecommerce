@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -16,13 +18,14 @@ public class Coupon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_id")
-    private int id;
+    private Long id;
 
-    @Column(name = "coupon_name")
     private String name;
 
-    @Column(name = "coupon_number")
-    private String number;
 
-    private String discountPrice;
+    private int discountPrice;
+
+    private int maxIssueCount;
+
+
 }

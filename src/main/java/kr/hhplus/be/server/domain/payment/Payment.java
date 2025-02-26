@@ -18,13 +18,14 @@ public class Payment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
-    private int id;
+    private Long id;
 
     private int amount;
 
     private String method;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
 
     @OneToOne
     @JoinColumn(name = "order_id")

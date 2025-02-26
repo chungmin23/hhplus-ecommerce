@@ -3,25 +3,23 @@ package kr.hhplus.be.server.domain.coupon;
 import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.common.BaseEntity;
 import kr.hhplus.be.server.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CouponEvent extends BaseEntity {
+public class CouponIssue extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "coupon_event_id")
-    private int id;
+    @Column(name = "coupon_issue_id")
+    private Long id;
 
-    private String couponName;
+    private String name;
 
-    private String status;
+    private boolean  status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")

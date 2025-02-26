@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.user;
 
-import kr.hhplus.be.server.domain.common.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErroMessages;
 import kr.hhplus.be.server.infrastructure.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
