@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CouponResponse {
-    private int couponId;
+    private Long couponId;
 
     private int discountAmount;
 
     private boolean isUsed;
+
+    private String name;
 }

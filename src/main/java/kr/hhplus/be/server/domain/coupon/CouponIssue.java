@@ -5,6 +5,8 @@ import kr.hhplus.be.server.domain.common.BaseEntity;
 import kr.hhplus.be.server.domain.user.User;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -21,6 +23,8 @@ public class CouponIssue extends BaseEntity {
 
     private boolean  status;
 
+    private LocalDateTime usedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
@@ -29,4 +33,13 @@ public class CouponIssue extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="coupon_id")
     private Coupon coupon;
+
+    public CouponIssue(Coupon coupon, User user) {
+        this.coupon = coupon;
+        this.user = user;
+        this.status = false;
+        this.usedAt = null;
+    }
+
+
 }

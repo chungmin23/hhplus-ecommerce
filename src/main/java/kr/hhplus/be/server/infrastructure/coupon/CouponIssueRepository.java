@@ -13,8 +13,7 @@ import java.util.Optional;
 @Repository
 public interface CouponIssueRepository extends JpaRepository<CouponIssue, Long> {
     //특정 사용자가 사용하지 않은 쿠폰 조회
-    @Query("SELECT ci FROM CouponIssue ci WHERE ci.user.id = :userId and ci.status = false")
-    List<CouponIssue> findUnusedCouponByUserId(@Param("userId") Long userId);
+    List<CouponIssue> findAllByUserIdAndStatus(Long userId, boolean status );
 
     // 특정 쿠폰 id 와 사용자 id로 사용되지 않은 쿠폰 조회
     @Query("SELECT ci FROM CouponIssue ci WHERE ci.coupon.id = :couponId AND ci.status = false")
@@ -22,5 +21,10 @@ public interface CouponIssueRepository extends JpaRepository<CouponIssue, Long> 
 
     // 쿠폰 ID별 발급된 쿠폰 수를 반환
     long countByCouponId(Long couponId);
+
+
+    boolean existsByUserIdAndCouponId(Long userId, Long couponId);
+
+    List<CouponIssue> findByCouponIdOrderByIdAsc(Long couponId);
 
 }
