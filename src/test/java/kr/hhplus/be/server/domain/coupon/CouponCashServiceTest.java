@@ -4,6 +4,7 @@ import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infrastructure.coupon.CouponIssueRepository;
 import kr.hhplus.be.server.infrastructure.coupon.CouponRepository;
 import kr.hhplus.be.server.infrastructure.user.UserRepository;
+import kr.hhplus.be.server.interfaces.api.coupon.schedullar.CouponScheduler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,9 @@ class CouponCashServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CouponScheduler couponScheduler;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -103,7 +107,7 @@ class CouponCashServiceTest {
         }
 
         // 스케줄러 실행
-        couponCashService.processCouponRequests();
+        couponScheduler.processCouponRequests();
 
         // DB에서 발급된 쿠폰 개수 확인
         long issuedCount = couponIssueRepository.countByCouponId(testCoupon.getId());
