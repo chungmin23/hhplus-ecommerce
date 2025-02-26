@@ -25,6 +25,7 @@ repositories {
 
 dependencyManagement {
 	imports {
+		mavenBom("org.springframework.boot:spring-boot-dependencies:3.4.1")
 		mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.0")
 	}
 }
@@ -58,6 +59,10 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
+
+	// Kafka
+	implementation("org.springframework.kafka:spring-kafka")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
 }
 
 tasks.withType<Test> {
