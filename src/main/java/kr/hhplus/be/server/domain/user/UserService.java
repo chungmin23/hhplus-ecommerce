@@ -26,7 +26,8 @@ public class UserService {
     // 잔고 충전
     @Transactional
     public User chargeBalance(Long userId, int amount){
-        User user = getUserById(userId);
+        User user = userRepository.findUserForUpdate(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         int updateBalance = user.getBalance() + amount;
 
