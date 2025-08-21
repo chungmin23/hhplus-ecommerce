@@ -5,7 +5,7 @@ import kr.hhplus.be.server.domain.coupon.Coupon;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infrastructure.order.OrderDetailRepository;
-import kr.hhplus.be.server.interfaces.exception.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErrorMessages;
 import kr.hhplus.be.server.infrastructure.order.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -58,14 +58,14 @@ public class OrderService {
     // 주문 id 확인
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.ORDER_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.ORDER_NOT_FOUND));
     }
 
     // 주문 상태 업데이트
     @Transactional
     public Order updateOrderStatus(Long orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.ORDER_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.ORDER_NOT_FOUND));
         order.setStatus(status);
         return orderRepository.save(order);
     }

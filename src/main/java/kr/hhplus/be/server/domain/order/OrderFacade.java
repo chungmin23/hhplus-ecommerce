@@ -48,17 +48,17 @@ public class OrderFacade {
             productService.validateAndReduceStock(detailRequest.getProductId(), detailRequest.getQuantity());
             //최신 가격 조회
             Product product = productService.getProductById(detailRequest.getProductId());
-            totalPrice += product.getPrice() * detailRequest.getQuantity();
+            int itemPrice = product.getPrice() * detailRequest.getQuantity();
 
             // 주문 상세 생성
             OrderDetail orderDetail = OrderDetail.builder()
                     .product(product)
                     .quantity(detailRequest.getQuantity())
-                    .price(product.getPrice() * detailRequest.getQuantity())
+                    .price(itemPrice)
                     .build();
 
             orderDetails.add(orderDetail);
-            totalPrice += orderDetail.getPrice();
+            totalPrice += itemPrice;
 
         }
 

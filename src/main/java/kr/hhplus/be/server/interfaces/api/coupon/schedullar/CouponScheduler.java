@@ -23,7 +23,7 @@ public class CouponScheduler {
     /**
      *  스케줄러  (매 10초 실행)
      */
-    @Scheduled(fixedRate = 10000)
+    //@Scheduled(fixedRate = 10000)
     @Transactional
     public void processCouponRequests() {
         Set<String> requestKeys = couponCashService.getRedisCouponKeys();

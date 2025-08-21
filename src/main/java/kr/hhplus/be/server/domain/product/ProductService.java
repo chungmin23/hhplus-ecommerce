@@ -1,14 +1,15 @@
 package kr.hhplus.be.server.domain.product;
 
 import jakarta.persistence.LockModeType;
-import kr.hhplus.be.server.interfaces.exception.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErrorMessages;
 import kr.hhplus.be.server.infrastructure.order.OrderRepository;
 import kr.hhplus.be.server.infrastructure.product.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +41,7 @@ public class ProductService {
     }
 
     // 재고 검증 및 감소
+    @Transactional
     public void validateAndReduceStock(Long productId, int quantity) {
         Product product = getProductById(productId);
 
@@ -51,6 +53,6 @@ public class ProductService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public Product getProductById(Long productId) {
         return productRepository.findByIdWithLock(productId)
-                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.PRODUCT_NOT_FOUND));
     }
 }

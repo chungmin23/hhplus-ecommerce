@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.infrastructure.coupon;
 
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 

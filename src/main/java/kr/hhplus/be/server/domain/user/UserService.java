@@ -1,11 +1,9 @@
 package kr.hhplus.be.server.domain.user;
 
-import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
-import kr.hhplus.be.server.interfaces.exception.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErrorMessages;
 import kr.hhplus.be.server.infrastructure.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,23 +14,22 @@ public class UserService {
     //최대 잔고 금액
     private static final int MAX_BALANCE_EXCEEDED = 1000000;
 
-    // 비관적 락 추가
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    // 사용자 조회
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.USER_NOT_FOUND));
     }
 
     // 잔고 충전
     @Transactional
     public User chargeBalance(Long userId, int amount){
         User user = userRepository.findUserForUpdate(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.USER_NOT_FOUND));
 
         int updateBalance = user.getBalance() + amount;
 
         if(updateBalance > MAX_BALANCE_EXCEEDED){
-            throw new IllegalArgumentException(ErroMessages.MAX_BALANCE_EXCEEDED);
+            throw new IllegalArgumentException(ErrorMessages.MAX_BALANCE_EXCEEDED);
         }
 
         user.setBalance(updateBalance);
@@ -43,19 +40,19 @@ public class UserService {
 
     // 잔고 조회
     public User getBalance(Long userId){
-        return userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
+        return userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException(ErrorMessages.USER_NOT_FOUND));
     }
 
     //잔고 감소
     @Transactional
     public User deductBalance(Long userId, int amount) {
-        // 사용자 조회
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
+        // 사용자 조회 (비관적 락 사용)
+        User user = userRepository.findUserForUpdate(userId)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.USER_NOT_FOUND));
         
         // 잔액 확인
         if (user.getBalance() < amount) {
-            throw new IllegalArgumentException(ErroMessages.INSUFFICIENT_BALANCE);
+            throw new IllegalArgumentException(ErrorMessages.INSUFFICIENT_BALANCE);
         }
         
         //잔액 차감

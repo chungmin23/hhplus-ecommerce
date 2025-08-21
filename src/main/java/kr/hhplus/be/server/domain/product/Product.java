@@ -2,7 +2,7 @@ package kr.hhplus.be.server.domain.product;
 
 import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.common.BaseEntity;
-import kr.hhplus.be.server.interfaces.exception.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErrorMessages;
 import lombok.*;
 
 @Entity
@@ -25,7 +25,7 @@ public class Product extends BaseEntity {
     // 재고 감소
     public void decreaseStock(int quantity) {
         if (stock < quantity) {
-            throw new IllegalArgumentException(ErroMessages.OUT_OF_STOCK + name);
+            throw new IllegalArgumentException(ErrorMessages.OUT_OF_STOCK + name);
         }
         stock -= quantity;
     }

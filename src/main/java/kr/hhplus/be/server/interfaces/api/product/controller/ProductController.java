@@ -42,8 +42,6 @@ public class ProductController {
     }
 
     @Operation(summary = "상위 상품 조회", description = "상위 상품을 조회합니다.")
-
-   // @Cacheable(cacheNames = "getProducts",  key = "'products:days:' + #days + ':size:' + #size", cacheManager = "boardCacheManager")
     //상위 상품 조회
     @GetMapping("/top")
     public ResponseEntity topProducts( @RequestParam(defaultValue = "3") int days,

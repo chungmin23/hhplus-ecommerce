@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderStatus;
 import kr.hhplus.be.server.infrastructure.payment.PaymentRepository;
-import kr.hhplus.be.server.interfaces.exception.ErroMessages;
+import kr.hhplus.be.server.interfaces.exception.ErrorMessages;
 import org.springframework.stereotype.Service;
 
 @Service

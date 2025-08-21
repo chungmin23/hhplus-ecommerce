@@ -4,10 +4,9 @@ import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infrastructure.coupon.CouponCashRepository;
 import kr.hhplus.be.server.infrastructure.coupon.CouponIssueRepository;
-import kr.hhplus.be.server.infrastructure.coupon.CouponRepository;
+//import kr.hhplus.be.server.infrastructure.coupon.CouponRepository;
 import kr.hhplus.be.server.infrastructure.user.UserRepository;
-import kr.hhplus.be.server.interfaces.exception.ErroMessages;
-import org.springframework.data.redis.core.RedisTemplate;
+import kr.hhplus.be.server.interfaces.exception.ErrorMessages;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class CouponCashService {
 
-    private final CouponRepository couponRepository;
+  //  private final CouponRepository couponRepository;
 
     private final CouponIssueRepository couponIssueRepository;
 
@@ -26,8 +25,8 @@ public class CouponCashService {
     private final CouponCashRepository couponCashRepository;
 
 
-    public CouponCashService(CouponRepository couponRepository, CouponIssueRepository couponIssueRepository, UserRepository userRepository, CouponCashRepository couponCashRepository) {
-        this.couponRepository = couponRepository;
+    public CouponCashService( CouponIssueRepository couponIssueRepository, UserRepository userRepository, CouponCashRepository couponCashRepository) {
+       // this.couponRepository = couponRepository;
         this.couponIssueRepository = couponIssueRepository;
         this.userRepository = userRepository;
         this.couponCashRepository = couponCashRepository;
@@ -52,7 +51,7 @@ public class CouponCashService {
         List<CouponIssue> couponIssues = winners.stream()
                 .map(userId -> {
                     User user = userRepository.findById(Long.parseLong(userId))
-                            .orElseThrow(() -> new IllegalArgumentException(ErroMessages.USER_NOT_FOUND));
+                            .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.USER_NOT_FOUND));
                     return new CouponIssue(coupon, user);
                 })
                 .collect(Collectors.toList());
@@ -69,7 +68,7 @@ public class CouponCashService {
     public boolean requestCoupon(Long couponId, User user){
         // 중복 발급 여부 확인
         if (couponCashRepository.isCouponAlreadyIssued(couponId, user.getId())) {
-            throw new IllegalArgumentException(ErroMessages.COUPON_ALREADY_ISSUED);
+            throw new IllegalArgumentException(ErrorMessages.COUPON_ALREADY_ISSUED);
         }
 
         // 쿠폰 요청 등록

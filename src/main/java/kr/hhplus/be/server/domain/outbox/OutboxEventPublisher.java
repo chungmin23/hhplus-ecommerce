@@ -17,7 +17,7 @@ public class OutboxEventPublisher {
         this.kafkaProducer = kafkaProducer;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedDelay = 5000)
     public void publishEvents() {
         List<OutboxEvent> events = outboxEventRepository.findByStatus(OutboxEvent.Status.INIT);
         for (OutboxEvent event : events) {
